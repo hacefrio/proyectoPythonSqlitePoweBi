@@ -15,9 +15,9 @@ def crear_tabla():
         fecha TEXT,
         producto TEXT,
         categoria TEXT,
-        precio REAL,
+        precio INTEGER,
         cantidad INTEGER,
-        total REAL
+        total INTEGER
     )
     ''')
     conn.commit()
