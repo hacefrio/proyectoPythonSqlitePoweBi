@@ -3,12 +3,10 @@ from datetime import datetime
 import random
 import graficos
 
-# Crear una conexión a la base de datos SQLite
-conn = sqlite3.connect('ventas.db')
-cursor = conn.cursor()
-
 # Crear la tabla ventas
 def crear_tabla():
+    conn = sqlite3.connect('ventas.db')
+    cursor = conn.cursor()
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS ventas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,6 +19,7 @@ def crear_tabla():
     )
     ''')
     conn.commit()
+    conn.close()
 
 # Crear variable que guarda 50 productos, con sus respectivas categorías y precios
 productos = [
@@ -78,6 +77,8 @@ productos = [
 
 # Insertar datos al azar en la tabla ventas
 def insertar_datos_aleatorios():
+    conn = sqlite3.connect('ventas.db')
+    cursor = conn.cursor()
     print("¿Cuántos datos desea insertar?")
     cantidad = int(input())
     for _ in range(cantidad):
@@ -90,15 +91,21 @@ def insertar_datos_aleatorios():
             VALUES (?, ?, ?, ?, ?, ?)
         ''', (datetime.now().strftime('%Y-%m-%d %H:%M:%S'), producto[0], producto[1], producto[2], cantidad_producto, total))
     conn.commit()
+    conn.close()
 
 # Mostrar todos los registros de la tabla ventas
 def mostrar_datos():
+    conn = sqlite3.connect('ventas.db')
+    cursor = conn.cursor()
     cursor.execute('SELECT * FROM ventas')
     rows = cursor.fetchall()
     for row in rows:
         print(row)
+    conn.close()
 # metodo que exporte los datos a un archivo csv
 def exportar_datos():
+    conn = sqlite3.connect('ventas.db')
+    cursor = conn.cursor()
     cursor.execute('SELECT * FROM ventas')
     rows = cursor.fetchall()
     with open('ventas.csv', 'w') as file:
@@ -107,6 +114,7 @@ def exportar_datos():
         for row in rows:
             file.write(f"{row[0]},{row[1]},{row[2]},{row[3]},{row[4]},{row[5]},{row[6]}\n")
     print("Datos exportados correctamente")
+    conn.close()
     
 # Menú de opciones
 def menu():
